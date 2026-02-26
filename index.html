@@ -1,109 +1,113 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mobile Repair Support</title>
+<title>Mobile Repair Support</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      text-align: center;
-      padding: 20px;
-    }
+<style>
+body{
+font-family: Arial;
+background: linear-gradient(135deg,#0d6efd,#00c6ff);
+text-align:center;
+color:white;
+margin:0;
+padding:20px;
+}
 
-    h1 {
-      color: #0d6efd;
-    }
+.box{
+background:white;
+color:black;
+padding:20px;
+border-radius:10px;
+display:inline-block;
+width:300px;
+}
 
-    .box {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-      display: inline-block;
-    }
+input, textarea{
+width:90%;
+padding:8px;
+margin:5px;
+}
 
-    input, textarea {
-      width: 250px;
-      padding: 8px;
-      margin: 5px;
-    }
+button{
+padding:10px 20px;
+background:#0d6efd;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
 
-    button {
-      background-color: #0d6efd;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+#adminPanel{
+display:none;
+background:white;
+color:black;
+padding:20px;
+margin-top:20px;
+border-radius:10px;
+}
 
-    #output {
-      margin-top: 20px;
-      background: #fff;
-      padding: 15px;
-      border-radius: 8px;
-      display: none;
-    }
-
-    .whatsapp {
-      margin-top: 15px;
-      background-color: green;
-    }
-
-    .footer {
-      margin-top: 30px;
-      font-size: 14px;
-      color: gray;
-    }
-  </style>
-
+</style>
 </head>
+
 <body>
 
-  <h1>Mobile Repair Online Support</h1>
-  <p>Apni mobile problem niche likh kar submit karein.</p>
+<h2>Mobile Repair Support</h2>
 
-  <div class="box">
-    <form onsubmit="showData(); return false;">
-      <input type="text" id="name" placeholder="Your Name" required><br>
-      <input type="text" id="phone" placeholder="Your Phone Number" required><br>
-      <input type="text" id="model" placeholder="Mobile Model" required><br>
-      <textarea id="problem" placeholder="Problem Details" required></textarea><br>
-      <button type="submit">Submit</button>
-    </form>
-  </div>
+<div class="box">
+<form onsubmit="saveData(); return false;">
+<input type="text" id="name" placeholder="Name" required><br>
+<input type="text" id="phone" placeholder="Phone" required><br>
+<input type="text" id="model" placeholder="Model" required><br>
+<textarea id="problem" placeholder="Problem" required></textarea><br>
+<button type="submit">Submit</button>
+</form>
+</div>
 
-  <div id="output"></div>
+<br><br>
 
-  <br>
+<button onclick="openAdmin()">Open Admin Panel</button>
 
-  <a href="https://wa.me/918016420491" target="_blank">
-    <button class="whatsapp">Chat on WhatsApp</button>
-  </a>
+<div id="adminPanel">
+<h3>Admin Panel</h3>
+<div id="dataList"></div>
+</div>
 
 <script>
-function showData() {
-  var name = document.getElementById("name").value;
-  var phone = document.getElementById("phone").value;
-  var model = document.getElementById("model").value;
-  var problem = document.getElementById("problem").value;
 
-  var outputBox = document.getElementById("output");
-  outputBox.style.display = "block";
+function saveData(){
+var name=document.getElementById("name").value;
+var phone=document.getElementById("phone").value;
+var model=document.getElementById("model").value;
+var problem=document.getElementById("problem").value;
 
-  outputBox.innerHTML =
-    "<h3>Problem Submitted Successfully!</h3>" +
-    "<p><b>Name:</b> " + name + "</p>" +
-    "<p><b>Phone:</b> " + phone + "</p>" +
-    "<p><b>Mobile Model:</b> " + model + "</p>" +
-    "<p><b>Problem:</b> " + problem + "</p>";
+var data=JSON.parse(localStorage.getItem("repairs")) || [];
+data.push({name,phone,model,problem});
+localStorage.setItem("repairs",JSON.stringify(data));
+
+alert("Submitted Successfully!");
 }
-</script>
 
-<div class="footer">
-  Website Created By Dhoni
-</div>
+function openAdmin(){
+var pass=prompt("Enter Admin Password:");
+if(pass=="1234"){
+document.getElementById("adminPanel").style.display="block";
+showData();
+}else{
+alert("Wrong Password!");
+}
+}
+
+function showData(){
+var data=JSON.parse(localStorage.getItem("repairs")) || [];
+var output="";
+data.forEach(function(item){
+output+="<p><b>Name:</b> "+item.name+"<br><b>Phone:</b> "+item.phone+"<br><b>Model:</b> "+item.model+"<br><b>Problem:</b> "+item.problem+"</p><hr>";
+});
+document.getElementById("dataList").innerHTML=output;
+}
+
+</script>
 
 </body>
 </html>
